@@ -4,3 +4,5 @@ glab-cli/**/mr.json
 **/.DS_Store
 **/lazy-lock.json
 github-copilot/hosts.json
+omz-custom/plugins
+omz
