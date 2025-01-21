@@ -1,1 +1,6 @@
 op
+glab-cli/config.yml
+glab-cli/**/mr.json
+**/.DS_Store
+**/lazy-lock.json
+github-copilot/hosts.json
