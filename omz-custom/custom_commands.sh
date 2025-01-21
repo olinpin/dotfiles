@@ -136,7 +136,7 @@ function ip() {
   dig +short myip.opendns.com @resolver1.opendns.com
 }
 
-private function get_ip_sha1_hash() {
+function get_ip_sha1_hash() {
   if [[ -z $1 ]];
   then
     echo "Include string"
