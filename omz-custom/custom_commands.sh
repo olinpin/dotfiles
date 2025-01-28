@@ -201,6 +201,34 @@ function cmr() {
   glab mr create -a oliver --reviewer=$reviewers --target-branch=$target_branch -t "Merge branch: '$(git branch --show-current)' into $target_branch" $draft
 }
 
+function glisu() {
+  id=$1
+  if [[ -z $1 ]];
+  then
+    echo "No issue number supplied, using current branch"
+    id=$(git branch --show-current | sed -rn 's/^[^0-9]*([[:digit:]]*).*/\1/p')
+    if [[ -z $id ]];
+    then
+      echo "No issue number found"
+      return
+    fi;
+  fi;
+  project=$(basename $(pwd))
+  issue_project=$(echo $project | sed 's/api/front/')
+  url="https://gitlab.elnino.tech/elnino/snooze/$issue_project/-/issues/$id"
+  touch "/tmp/$id.md"
+  nvim "/tmp/$id.md"
+  CONTENT=$(cat "/tmp/$id.md")
+  if [[ -z $CONTENT ]];
+  then
+    echo "No content"
+    return
+  fi;
+  echo "Adding note to issue $id"
+  echo $CONTENT
+  rm "/tmp/$id.md"
+  glab issue note -m $CONTENT $url;
+}
 
 function branchname() {
   if [[ -z $1 ]];
