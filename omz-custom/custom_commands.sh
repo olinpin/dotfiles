@@ -15,6 +15,8 @@ alias ga="git add"
 
 alias gch="git checkout"
 
+alias lg="ls | grep"
+
 function gas() {
     git add --all 
     git status
