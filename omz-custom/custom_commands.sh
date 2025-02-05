@@ -376,8 +376,8 @@ function learning_time() {
   fi
   
   if (( $(echo "$LEARNING_DIFF > 0" | bc -l) )); then
-    echo -e "Total learning time missing: ${GREEN}$LEARNING_DIFF hours${NC}"
+    echo -e "Total learning time not used: ${GREEN}$LEARNING_DIFF hours${NC}"
   else
-    echo -e "Total extra learning time: ${RED}${LEARNING_DIFF#-} hours${NC}"
+    echo -e "Total extra learning time used: ${RED}${LEARNING_DIFF#-} hours${NC}"
   fi
 }
