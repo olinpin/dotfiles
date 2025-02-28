@@ -6,3 +6,4 @@ glab-cli/**/mr.json
 github-copilot/hosts.json
 omz-custom/plugins
 omz
+testDir
