@@ -103,8 +103,8 @@ function kfp() {
   }
 
   kubectl port-forward --namespace production svc/mysql-shared 3307:3306 &
-  kubectl port-forward --namespace acceptance svc/mysql-shared 3308:3306 &
-  kubectl port-forward --namespace dev svc/mysql-shared 3309:3306 &
+  kubectl port-forward --namespace acceptance svc/shared-mysql-master 3308:3306 &
+  kubectl port-forward --namespace dev svc/shared-mysql-master 3309:3306 &
   sleep 2
   pause 'Press [Enter] key to stop the port forwards...'
   pkill -9 kubectl
@@ -198,7 +198,7 @@ function cmr() {
     target_branch="master"
   fi
 
-  glab mr create -a oliver --reviewer=$reviewers --target-branch=$target_branch -t "Merge branch: '$(git branch --show-current)' into $target_branch" $draft
+  glab mr create -a oliver --reviewer=$reviewers --target-branch=$target_branch -t "Merge branch: '$(git branch --show-current)' into $target_branch" --fill -y $draft
 }
 
 function glisu() {
