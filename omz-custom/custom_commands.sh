@@ -124,7 +124,7 @@ function cmple() {
 }
 
 function ccd() {
-  pwd | pbcopy
+  printf "%q" "$(pwd)" | pbcopy
 }
 
 alias tat="tmux attach -t"
