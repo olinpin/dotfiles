@@ -91,7 +91,7 @@ alias yas="yarn serve"
 alias yai="yarn install"
 
 function kfpa() {
-  kubectl port-forward -n acceptance svc/victron-mysql-master 3306:3306
+  ssh -fNT -L 13306:127.0.0.1:13306 elnino-vitess
 }
 
 
