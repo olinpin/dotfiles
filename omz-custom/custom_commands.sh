@@ -276,6 +276,7 @@ unalias gl 2>/dev/null
 alias gl="glab"
 
 alias glci="glab ci view"
+alias glciw="glab ci view --web"
 
 # get snippets from elnino gitlab
 function gitlab_snippets() {
