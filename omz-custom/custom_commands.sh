@@ -382,3 +382,25 @@ function learning_time() {
     echo -e "Total extra learning time used: ${RED}${LEARNING_DIFF#-} hours${NC}"
   fi
 }
+
+# git pull all branches
+function gpla() {
+
+    # Define an array of branches to pull
+    branches=("master" "main" "release" "beta" "acceptance")
+
+    git pull
+    # Fetch each branch without switching
+    for branch in "${branches[@]}"; do
+        echo "Fetching latest changes for branch: $branch"
+
+        # Fetch and update the branch, skipping if it doesn't exist
+        if git fetch origin "$branch:$branch" 2>/dev/null; then
+            echo "Successfully updated $branch."
+        else
+            echo "Branch $branch does not exist on origin. Skipping..."
+        fi
+    done
+
+    echo "Finished fetching branches."
+}
