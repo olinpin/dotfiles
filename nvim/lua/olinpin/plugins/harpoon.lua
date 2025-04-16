@@ -1,5 +1,4 @@
 return {
-
     'ThePrimeagen/harpoon',
     event = "VeryLazy",
     dependencies = 'nvim-lua/plenary.nvim',
@@ -39,7 +38,6 @@ return {
             config.marks = new_marks
 
             ui.nav_prev()
-
         end)
         vim.keymap.set("n", "<leader>h", ui.toggle_quick_menu)
 
