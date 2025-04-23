@@ -20,5 +20,5 @@ return {
       }
     })
   end,
-  requires = { { 'hoob3rt/lualine.nvim', opt=true }, {'kyazdani42/nvim-web-devicons', opt = true} }
+  requires = { {'kyazdani42/nvim-web-devicons', opt = true} }
 }
