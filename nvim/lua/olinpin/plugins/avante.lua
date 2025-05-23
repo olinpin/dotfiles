@@ -23,7 +23,7 @@ return {
 		-- add any opts here
 		provider = "copilot",
 		copilot = {
-			model = "claude-3.7-sonnet",
+			model = "claude-sonnet-4",
 			-- max_tokens = 4096,
 		},
 	},
