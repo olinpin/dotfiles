@@ -22,10 +22,12 @@ return {
 	opts = {
 		-- add any opts here
 		provider = "copilot",
+        providers = {
 		copilot = {
 			model = "claude-sonnet-4",
 			-- max_tokens = 4096,
 		},
+    },
 	},
 	build = "make",
 	keys = {
