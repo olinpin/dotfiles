@@ -19,17 +19,18 @@ return {
 			vim.keymap.del("n", "<leader>a?")
 			vim.keymap.del("n", "<leader>aB")
 			vim.keymap.del("n", "<leader>aS")
+			vim.keymap.del("n", "<leader>an")
 		end)
 	end,
 	opts = {
 		-- add any opts here
 		provider = "copilot",
-        providers = {
-		copilot = {
-			model = "claude-sonnet-4",
-			-- max_tokens = 4096,
+		providers = {
+			copilot = {
+				model = "claude-sonnet-4",
+				-- max_tokens = 4096,
+			},
 		},
-    },
 	},
 	build = "make",
 	keys = {
