@@ -351,9 +351,10 @@ function learning_time() {
 
   USER_ID=300883
   LEARNING_ID=21758966
+  YEAR=$(date +%Y)
   INFO=$(curl --silent -u $PAYMO_TOKEN:f \
     -H 'Accept: application/json' \
-    --url "https://app.paymoapp.com/api/entries?where=user_id=$USER_ID")
+    --url "https://app.paymoapp.com/api/entries?where=user_id=$USER_ID%20and%20time_interval%20in%20(%22$YEAR-01-01T00%3A00%3A00.000Z%22%2C%22$YEAR-12-31T23%3A59%3A59.000Z%22)%20")
   LEARNING_TIME=$(jq "[.entries[] | select(.task_id==$LEARNING_ID) | .duration] | add" <<< "$INFO")
   TOTAL_TIME=$(jq "[.entries[] | .duration] | add" <<< "$INFO")
   # check if user added a parameter
@@ -368,7 +369,7 @@ function learning_time() {
   LEARNING_DIFF=$(echo "scale=2; $TOTAL_LEARNING_TIME - $LEARNING_TIME" | bc)
 
   echo -e "Total time spent: ${CYAN}$TOTAL_TIME hours${NC}"
-  echo -e "Total learning time should be: ${CYAN}$TOTAL_LEARNING_TIME hours${NC}"
+  echo -e "Total learning time available: ${CYAN}$TOTAL_LEARNING_TIME hours${NC}"
   echo -e "Total learning time spent: ${CYAN}$LEARNING_TIME hours${NC}"
   if (( $(echo "$PERCENTAGE_LEARNING > 10" | bc -l) )); then
     echo -e "Percentage of time spent learning: ${RED}${PERCENTAGE_LEARNING}%${NC}"
