@@ -1,6 +1,6 @@
 return {
 	"stevearc/conform.nvim",
-	event = 'BufWritePre', -- uncomment for format on save
+	event = "BufWritePre",
 	opts = {
 		lsp_fallback = true,
 
@@ -13,13 +13,19 @@ return {
 
 			sh = { "shfmt" },
 
-			go = {"goimports", "gofumpt" },
+			go = { "goimports", "gofumpt" },
 		},
 
-		format_on_save = {
-		  -- These options will be passed to conform.format()
-		  timeout_ms = 500,
-		  lsp_fallback = true,
-		},
+		format_on_save = function(bufnr)
+			local filetype = vim.bo[bufnr].filetype
+			if filetype == "javascript" then
+				return nil
+			end
+
+			return {
+				timeout_ms = 500,
+				lsp_fallback = true,
+			}
+		end,
 	},
 }
