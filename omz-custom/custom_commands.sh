@@ -175,11 +175,9 @@ function cmr() {
     draft=""
   fi
 
+  reviewers=""
   if [[ $1 =~ .*",".* ]]; then 
-    reviewers=$1;
-  else
-    echo "Needs at least two reviewers, only assigned"
-    return
+    reviewers="--reviewer=$1";
   fi;
 
   current_branch=$(git branch --show-current)
@@ -198,7 +196,7 @@ function cmr() {
     target_branch="master"
   fi
 
-  glab mr create -a oliver --reviewer=$reviewers --target-branch=$target_branch -t "Merge branch: '$(git branch --show-current)' into $target_branch" --fill -y $draft
+  glab mr create -a oliver $reviewers --target-branch=$target_branch -t "Merge branch: '$(git branch --show-current)' into $target_branch" --fill -y $draft
 }
 
 function glisu() {
