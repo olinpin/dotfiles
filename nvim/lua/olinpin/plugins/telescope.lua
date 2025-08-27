@@ -88,11 +88,17 @@ return {
 				end,
 			})
 		end
+
+		local function smart_open()
+			require("telescope").extensions.smart_open.smart_open()
+		end
+
 		vim.keymap.set("n", "<leader>ft", grepInFiles, { desc = "Live grep by filetype" })
 		vim.keymap.set("n", "<leader>*", builtin.grep_string, { desc = "Grep current string" })
-		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
+		vim.keymap.set("n", "<leader>fs", builtin.find_files, { desc = "Find files" })
 		vim.keymap.set("n", "<leader>fg", builtin.git_branches, { desc = "Find Git branches" })
 		vim.keymap.set("n", "<leader>fc", builtin.git_commits, { desc = "Find Commits" })
 		vim.keymap.set("n", "<leader>fw", builtin.live_grep, { desc = "Find Words" })
+		vim.keymap.set("n", "<leader>ff", smart_open, { desc = "Smart Open" })
 	end,
 }
