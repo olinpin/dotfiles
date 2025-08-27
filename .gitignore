@@ -5,5 +5,6 @@ glab-cli/**/mr.json
 **/lazy-lock.json
 github-copilot/hosts.json
 omz-custom/plugins
+omz-custom/vrm.sh
 omz
 testDir

@@ -29,6 +29,20 @@ return {
 		local telescope = require("telescope")
 
 		telescope.setup({
+			extensions = {
+				smart_open = {
+					mappings = {
+						i = {
+							-- works around smart_open overriding ctrl-w keybind for deleting
+							-- word. should be able to remove this once this issue is resolved:
+							-- https://github.com/danielfalk/smart-open.nvim/issues/71
+							["<C-w>"] = function()
+								vim.api.nvim_input("<c-s-w>")
+							end,
+						},
+					},
+				},
+			},
 			defaults = {
 				buffer_previewer_maker = new_maker,
 			},
