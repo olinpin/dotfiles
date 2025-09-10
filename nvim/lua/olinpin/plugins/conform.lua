@@ -16,16 +16,25 @@ return {
 			go = { "goimports", "gofumpt" },
 		},
 
-		format_on_save = function(bufnr)
-			local filetype = vim.bo[bufnr].filetype
-			if filetype == "javascript" then
-				return nil
-			end
-
-			return {
-				timeout_ms = 500,
-				lsp_fallback = true,
-			}
-		end,
+		-- format_on_save = function(bufnr)
+		-- 	local filetype = vim.bo[bufnr].filetype
+		-- 	if filetype == "javascript" then
+		-- 		return nil
+		-- 	end
+		-- 	if filetype == "vue" then
+		-- 		return nil
+		-- 	end
+		-- 	if filetype == "less" then
+		-- 		return nil
+		-- 	end
+		-- 	if filetype == "php" then
+		-- 		return nil
+		-- 	end
+		--
+		-- 	return {
+		-- 		timeout_ms = 500,
+		-- 		lsp_fallback = true,
+		-- 	}
+		-- end,
 	},
 }
