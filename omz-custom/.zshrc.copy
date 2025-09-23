@@ -14,6 +14,7 @@ prompt pure
 export PATH=$HOME/bin:/usr/local/bin:/opt/homebrew/bin:$PATH
 export PATH=$(go env GOPATH)/bin:$PATH
 export PATH=/User/oliverhnat/.local/bin/claude:$PATH
+export EDITOR="/opt/homebrew/bin/nvim"
 
 
 # Path to your oh-my-zsh installation.
