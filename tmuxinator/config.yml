@@ -1,0 +1,11 @@
+---
+name: config
+project_root: "~/.config"
+windows:
+- zsh:
+    layout: tiled
+    panes:
+    - cd ~/.ssh
+    - cd ~/.config/nvim
+    - cd ~/.config/
+    - cd ~/.config/omz-custom
