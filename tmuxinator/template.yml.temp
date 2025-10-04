@@ -1,0 +1,10 @@
+---
+name: {{$PROJECT_NAME}}
+project_root: {{$PROJECT_ROOT}}
+windows:
+- zsh:
+    layout: b8f6,198x59,0,0[198x39,0,0,71,198x19,0,40{99x19,0,40,73,98x19,100,40,75}]
+    panes:
+        - nvim
+        -  
+        - dcud

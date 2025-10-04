@@ -403,3 +403,6 @@ function gpla() {
 
     echo "Finished fetching branches."
 }
+
+# source the tmux-sessions.sh in the same folder
+source $(dirname "$0")/tmux-sessions.sh
