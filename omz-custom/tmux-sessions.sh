@@ -12,7 +12,7 @@ function mx() {
         return 1
     fi
 
-    if [ -f "$PROJECT_DIR" ]; then
+    if [ -d "$PROJECT_DIR" ]; then
     else
         echo "Directory does not exist: $PROJECT_DIR"
         return 1
