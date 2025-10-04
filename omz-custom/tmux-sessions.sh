@@ -35,20 +35,26 @@ function mx() {
 }
 
 function get_mux_sessions() {
-    ALL_PROJECTS=$(tmuxinator list | grep -v tmuxinator)
-    echo $ALL_PROJECTS
+    tmuxinator list | grep -v tmuxinator | tr ' ' '\n' | grep -v '^$'
 }
 
 function _mx_autocomplete() {
-    local cur
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    local projects="$(get_mux_sessions)"
-    COMPREPLY=()
-    while IFS= read -r line; do
-      COMPREPLY+=("$line")
-    done < <(
-      { compgen -W "$projects" -- "$cur"; compgen -f -- "$cur"; } | sort -u
-    )
+    local -a projects files dirs
+    local expl
+
+    # Get tmuxinator projects
+    projects=(${(f)"$(get_mux_sessions)"})
+
+    # Get files and directories with proper completion
+    _alternative \
+        'projects:tmuxinator projects:compadd -a projects' \
+        'files:files:_files'
 }
 
-complete -f -F _mx_autocomplete -o default mx
+# Register the completion function for zsh
+if [[ -n ${ZSH_VERSION-} ]]; then
+    compdef _mx_autocomplete mx
+else
+    # Fallback for bash
+    complete -f -F _mx_autocomplete -o default mx
+fi
