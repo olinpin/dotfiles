@@ -1,12 +1,8 @@
 function mx() {
-    PROJECT_DIR=$1
-    if [[ -z "$PROJECT_DIR" ]]; then
-        echo "Usage: mx <project_directory> [SESSION_NAME]"
-        return 1
-    fi
-
+    PROJECT_DIR=${1:-.}
+    SAFE_INPUT=$(printf '%s\n' "$PROJECT_DIR" | sed 's/[][\.^$*+?{}|()]/\\&/g')
     ALL_PROJECTS=$(get_mux_sessions)
-    IS_VALID_PROJECT=$(echo $ALL_PROJECTS | grep -o "\b$PROJECT_DIR\w*" | head -1)
+    IS_VALID_PROJECT=$(echo $ALL_PROJECTS | grep -o "[[:<:]]$SAFE_INPUT\w*" | head -1)
     if [[ $IS_VALID_PROJECT != "" ]]; then
         tmuxinator start "$IS_VALID_PROJECT"
         return 1
