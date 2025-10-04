@@ -1,11 +1,11 @@
 function mx() {
     PROJECT_DIR=$1
     if [[ -z "$PROJECT_DIR" ]]; then
-        echo "Usage: mux <project_directory> [SESSION_NAME]"
+        echo "Usage: mx <project_directory> [SESSION_NAME]"
         return 1
     fi
 
-    ALL_PROJECTS=$(tmuxinator list | grep -v tmuxinator)
+    ALL_PROJECTS=$(get_mux_sessions)
     IS_VALID_PROJECT=$(echo $ALL_PROJECTS | grep -o "\b$PROJECT_DIR\w*" | head -1)
     if [[ $IS_VALID_PROJECT != "" ]]; then
         echo $IS_VALID_PROJECT
@@ -33,4 +33,22 @@ function mx() {
     tmuxinator start $SESSION_NAME
 
 }
-complete -o default mux
+
+function get_mux_sessions() {
+    ALL_PROJECTS=$(tmuxinator list | grep -v tmuxinator)
+    echo $ALL_PROJECTS
+}
+
+function _mx_autocomplete() {
+    local cur
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    local projects="$(get_mux_sessions)"
+    COMPREPLY=()
+    while IFS= read -r line; do
+      COMPREPLY+=("$line")
+    done < <(
+      { compgen -W "$projects" -- "$cur"; compgen -f -- "$cur"; } | sort -u
+    )
+}
+
+complete -f -F _mx_autocomplete -o default mx
