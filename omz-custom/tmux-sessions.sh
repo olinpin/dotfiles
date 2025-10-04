@@ -8,18 +8,18 @@ function mx() {
     ALL_PROJECTS=$(get_mux_sessions)
     IS_VALID_PROJECT=$(echo $ALL_PROJECTS | grep -o "\b$PROJECT_DIR\w*" | head -1)
     if [[ $IS_VALID_PROJECT != "" ]]; then
-        echo $IS_VALID_PROJECT
         tmuxinator start "$IS_VALID_PROJECT"
         return 1
     fi
 
-    SESSION_NAME=${2:-$(basename $(realpath "$PROJECT_DIR"))}
-    WHOLE_PATH=$(realpath "$PROJECT_DIR")
-    if [[ $WHOLE_PATH == "*No such file or directory*" ]]; then
+    if [ -f "$PROJECT_DIR" ]; then
+    else
         echo "Directory does not exist: $PROJECT_DIR"
         return 1
     fi
 
+    WHOLE_PATH=$(realpath "$PROJECT_DIR")
+    SESSION_NAME=${2:-$(basename $WHOLE_PATH)}
     # check if file doesn't exist yet in the tmuxinator config directory
     TMUXINATOR_CONFIG=~/.config/tmuxinator/$SESSION_NAME.yml
     if [[ -f $TMUXINATOR_CONFIG ]]; then
