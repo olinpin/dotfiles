@@ -127,11 +127,7 @@ function ccd() {
   printf "%q" "$(pwd)" | pbcopy
 }
 
-alias tat="tmux attach -t"
-
 alias t="tmux"
-
-alias tls="tmux ls"
 
 function ip() {
   dig +short myip.opendns.com @resolver1.opendns.com

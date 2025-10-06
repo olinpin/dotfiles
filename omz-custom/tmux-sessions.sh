@@ -1,7 +1,7 @@
-function mx() {
+function tat() {
     PROJECT_DIR=${1:-.}
     SAFE_INPUT=$(printf '%s\n' "$PROJECT_DIR" | sed 's/[][\.^$*+?{}|()]/\\&/g')
-    ALL_PROJECTS=$(get_mux_sessions)
+    ALL_PROJECTS=$(tls)
     IS_VALID_PROJECT=$(echo $ALL_PROJECTS | grep -io "[[:<:]]$SAFE_INPUT\w*" | head -1)
     if [[ $IS_VALID_PROJECT != "" ]]; then
         tmuxinator start "$IS_VALID_PROJECT"
@@ -30,7 +30,7 @@ function mx() {
 
 }
 
-function get_mux_sessions() {
+function tls() {
     tmuxinator list | grep -v tmuxinator | tr ' ' '\n' | grep -v '^$'
 }
 
@@ -39,7 +39,7 @@ function _mx_autocomplete() {
     local expl
 
     # Get tmuxinator projects
-    projects=(${(f)"$(get_mux_sessions)"})
+    projects=(${(f)"$(tls)"})
 
     # Get files and directories with proper completion
     _alternative \
@@ -49,8 +49,8 @@ function _mx_autocomplete() {
 
 # Register the completion function for zsh
 if [[ -n ${ZSH_VERSION-} ]]; then
-    compdef _mx_autocomplete mx
+    compdef _mx_autocomplete tat
 else
     # Fallback for bash
-    complete -f -F _mx_autocomplete -o default mx
+    complete -f -F _mx_autocomplete -o default tat
 fi
