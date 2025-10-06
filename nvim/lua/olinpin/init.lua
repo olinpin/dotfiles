@@ -8,3 +8,4 @@ vim.o.timeoutlen = 0
 -- setup prolog
 require('lspconfig/prolog_lsp')
 require('lspconfig').prolog_lsp.setup{}
+require('olinpin.intro').open()
