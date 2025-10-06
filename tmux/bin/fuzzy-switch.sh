@@ -25,7 +25,9 @@ sel="$(
   printf '%s\n' "$items" | fzf \
     --prompt='Project > ' \
     --height=100% --layout=reverse \
-    --print-query --expect=enter
+    --print-query --expect=enter \
+    --bind 'tab:down,btab:up'  \
+    --cycle
 )" || exit 0
 
 key="$(printf '%s\n' "$sel" | sed -n '1p')"
