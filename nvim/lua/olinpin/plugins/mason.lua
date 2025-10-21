@@ -115,7 +115,8 @@ local function syncPackages(ensurePacks)
 end
 
 return {
-	"williamboman/mason.nvim",
+	{
+		"williamboman/mason.nvim",
 	init = function()
 		-- Do not crowd home directory with NPM cache folder
 		vim.env.npm_config_cache = vim.env.HOME .. "/.cache/npm"
@@ -141,5 +142,71 @@ return {
 		end, 3000)
 	end,
 
-	event = { "VeryLazy" },
+		event = { "VeryLazy" },
+	},
+	{
+		"williamboman/mason-lspconfig.nvim",
+		dependencies = { "williamboman/mason.nvim" },
+		config = function()
+			local on_attach = function(client, bufnr)
+				local opts = { buffer = bufnr, silent = true }
+
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+				vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
+				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+				vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
+				vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
+				vim.keymap.set({ "n", "x" }, "<F3>", function()
+					vim.lsp.buf.format({ async = true })
+				end, opts)
+				vim.keymap.set("n", "<F4>", vim.lsp.buf.code_action, opts)
+			end
+
+			-- Configure LSP servers using new vim.lsp.config API
+			vim.lsp.config('lua_ls', {
+				on_attach = on_attach,
+				settings = {
+					Lua = {
+						runtime = { version = 'LuaJIT' },
+						diagnostics = { globals = { 'vim' } },
+						workspace = {
+							library = vim.api.nvim_get_runtime_file("", true),
+							checkThirdParty = false,
+						},
+						telemetry = { enable = false },
+					},
+				},
+			})
+
+			vim.lsp.config('ts_ls', { on_attach = on_attach })
+			vim.lsp.config('pyright', { on_attach = on_attach })
+			vim.lsp.config('html', { on_attach = on_attach })
+			vim.lsp.config('cssls', { on_attach = on_attach })
+			vim.lsp.config('jsonls', { on_attach = on_attach })
+			vim.lsp.config('yamlls', { on_attach = on_attach })
+			vim.lsp.config('intelephense', { on_attach = on_attach })
+			vim.lsp.config('eslint', { on_attach = on_attach })
+			
+			require("mason-lspconfig").setup({
+				ensure_installed = {
+					"lua_ls",
+					"ts_ls", 
+					"pyright",
+					"html",
+					"cssls",
+					"jsonls",
+					"yamlls",
+					"intelephense",
+					"eslint",
+				},
+				automatic_installation = true,
+			})
+		end,
+	},
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = { "williamboman/mason-lspconfig.nvim" },
+	},
 }

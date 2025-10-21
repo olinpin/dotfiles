@@ -45,7 +45,7 @@ return {
 				additional_vim_regex_highlighting = {"markdown"}
 			},
         }
-        -- vim.keymap.set('n','gd',vim.lsp.buf.definition)
+
     end
 
 }
