@@ -45,13 +45,6 @@ return {
 				additional_vim_regex_highlighting = {"markdown"}
 			},
         }
-        require'lspconfig'.sourcekit.setup{
-            cmd = {'/usr/bin/sourcekit-lsp'}
-        }
-        require('lspconfig')['hls'].setup{
-            filetypes = { 'haskell', 'lhaskell', 'cabal' },
-        }
-
         -- vim.keymap.set('n','gd',vim.lsp.buf.definition)
     end
 
