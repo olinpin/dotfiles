@@ -8,3 +8,5 @@ omz-custom/plugins
 omz-custom/vrm.sh
 omz
 testDir
+tmuxinator/*.yml
+!tmuxinator/template.yml.temp
