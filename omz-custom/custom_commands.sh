@@ -17,6 +17,8 @@ alias gch="git checkout"
 
 alias lg="ls | grep"
 
+alias gdc="git diff --cached"
+
 function gas() {
     git add --all 
     git status
