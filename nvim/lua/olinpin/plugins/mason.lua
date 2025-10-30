@@ -27,10 +27,10 @@ local PACKAGES = {
 	-- Lint
 	"eslint-lsp",
 	"pylint",
-    "jq",
-    "php-cs-fixer",
-    "intelephense",
-    "prettier",
+	"jq",
+	"php-cs-fixer",
+	"intelephense",
+	"prettier",
 }
 
 local function install(pack, version)
@@ -117,30 +117,30 @@ end
 return {
 	{
 		"williamboman/mason.nvim",
-	init = function()
-		-- Do not crowd home directory with NPM cache folder
-		vim.env.npm_config_cache = vim.env.HOME .. "/.cache/npm"
-	end,
-	opts = {
-		ui = {
-			border = "rounded",
-			height = 0.85,
-			width = 0.8,
+		init = function()
+			-- Do not crowd home directory with NPM cache folder
+			vim.env.npm_config_cache = vim.env.HOME .. "/.cache/npm"
+		end,
+		opts = {
+			ui = {
+				border = "rounded",
+				height = 0.85,
+				width = 0.8,
+			},
 		},
-	},
-	config = function(_, opts)
-		require("mason").setup(opts)
+		config = function(_, opts)
+			require("mason").setup(opts)
 
-		-- Filter out disabled packages
-		local packages = {}
-		for _, package in ipairs(PACKAGES) do
-			table.insert(packages, package)
-		end
+			-- Filter out disabled packages
+			local packages = {}
+			for _, package in ipairs(PACKAGES) do
+				table.insert(packages, package)
+			end
 
-		vim.defer_fn(function()
-			syncPackages(packages)
-		end, 3000)
-	end,
+			vim.defer_fn(function()
+				syncPackages(packages)
+			end, 3000)
+		end,
 
 		event = { "VeryLazy" },
 	},
@@ -148,6 +148,8 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = { "williamboman/mason.nvim" },
 		config = function()
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
 			local on_attach = function(client, bufnr)
 				local opts = { buffer = bufnr, silent = true }
 
@@ -165,12 +167,13 @@ return {
 			end
 
 			-- Configure LSP servers using new vim.lsp.config API
-			vim.lsp.config('lua_ls', {
+			vim.lsp.config("lua_ls", {
 				on_attach = on_attach,
+				capabilities = capabilities,
 				settings = {
 					Lua = {
-						runtime = { version = 'LuaJIT' },
-						diagnostics = { globals = { 'vim' } },
+						runtime = { version = "LuaJIT" },
+						diagnostics = { globals = { "vim" } },
 						workspace = {
 							library = vim.api.nvim_get_runtime_file("", true),
 							checkThirdParty = false,
@@ -180,19 +183,29 @@ return {
 				},
 			})
 
-			vim.lsp.config('ts_ls', { on_attach = on_attach })
-			vim.lsp.config('pyright', { on_attach = on_attach })
-			vim.lsp.config('html', { on_attach = on_attach })
-			vim.lsp.config('cssls', { on_attach = on_attach })
-			vim.lsp.config('jsonls', { on_attach = on_attach })
-			vim.lsp.config('yamlls', { on_attach = on_attach })
-			vim.lsp.config('intelephense', { on_attach = on_attach })
-			vim.lsp.config('eslint', { on_attach = on_attach })
-			
+			vim.lsp.config("ts_ls", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("pyright", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("html", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("cssls", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("jsonls", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("yamlls", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("intelephense", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				settings = {
+					intelephense = {
+						format = {
+							enable = true,
+						},
+					},
+				},
+			})
+			vim.lsp.config("eslint", { on_attach = on_attach, capabilities = capabilities })
+
 			require("mason-lspconfig").setup({
 				ensure_installed = {
 					"lua_ls",
-					"ts_ls", 
+					"ts_ls",
 					"pyright",
 					"html",
 					"cssls",
