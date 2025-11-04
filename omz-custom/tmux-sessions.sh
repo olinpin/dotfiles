@@ -34,7 +34,7 @@ function tls() {
     tmuxinator list | grep -v tmuxinator | tr ' ' '\n' | grep -v '^$'
 }
 
-function _mx_autocomplete() {
+function _tat_autocomplete() {
     local -a projects files dirs
     local expl
 
@@ -49,8 +49,8 @@ function _mx_autocomplete() {
 
 # Register the completion function for zsh
 if [[ -n ${ZSH_VERSION-} ]]; then
-    compdef _mx_autocomplete tat
+    compdef _tat_autocomplete tat
 else
     # Fallback for bash
-    complete -f -F _mx_autocomplete -o default tat
+    complete -f -F _tat_autocomplete -o default tat
 fi
