@@ -1,6 +1,5 @@
 # autocomplete
 
-# Where to cache usernames (override with $CMR_USER_CACHE if you want)
 : ${CMR_USER_CACHE:="$HOME/.cache/cmr_users"}
 
 cmr_update_users() {
@@ -29,31 +28,35 @@ _cmr() {
   local -a opts
   opts=('--draft')
 
-  # Complete options
+  # Option completion
   if [[ $words[CURRENT] == -* ]]; then
     _describe 'options' opts
     return
   fi
 
-  # Load cached users
+  # Cache path
   : ${CMR_USER_CACHE:="$HOME/.cache/cmr_users"}
-  local -a users
-  if [[ -r "$CMR_USER_CACHE" ]]; then
-    users=("${(@f)$(< "$CMR_USER_CACHE")}")
-  else
-    # No cache yet → nothing to complete
-    return 0
+
+  # If cache missing → auto-update once
+  if [[ ! -r "$CMR_USER_CACHE" ]]; then
+    # Show a short message only once per shell session
+    print -r -- "cmr: user cache missing, updating..." >&2
+    cmr_update_users
   fi
 
-  # Full current "word" (may contain commas)
+  # Load cached users
+  local -a users
+  users=("${(@f)$(< "$CMR_USER_CACHE")}")
+
+  # Full current "word" at cursor
   local cur=$words[CURRENT]
 
-  # Split into prefix (before last comma) and fragment being typed (after last comma)
+  # Split into prefix (before last comma) + fragment after last comma
   local prefix last
   prefix="${cur%,*}"
   last="${cur##*,}"
 
-  # Tell zsh what is fixed and what is being completed
+  # Tell zsh what is fixed vs typed fragment
   if [[ "$prefix" != "$cur" ]]; then
     IPREFIX="${prefix},"
     PREFIX="$last"
@@ -62,7 +65,7 @@ _cmr() {
     PREFIX="$cur"
   fi
 
-  # Filter users by the fragment (substring match)
+  # Substring filter locally
   if [[ -n "$last" ]]; then
     local -a filtered
     local u
@@ -74,7 +77,6 @@ _cmr() {
 
   (( ${#users} == 0 )) && return 0
 
-  # Offer usernames; zsh will prefix with $IPREFIX
   compadd -Q -- "${users[@]}"
 }
 
