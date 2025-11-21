@@ -1,26 +1,40 @@
 # autocomplete
 
 _cmr() {
+  emulate -L zsh
+  setopt extended_glob
+
   local -a opts
   opts=('--draft')
 
-  # If completing an option
+  # Complete options
   if [[ $words[CURRENT] == -* ]]; then
     _describe 'options' opts
     return
   fi
 
-  # Extract the full argument being completed (comma-separated)
+  # Full current "word" at cursor (may contain commas)
   local cur=$words[CURRENT]
+
+  # Split into prefix (before last comma) and fragment being typed (after last comma)
   local prefix last
   prefix="${cur%,*}"
   last="${cur##*,}"
+  local last_len=${#last}
+
+  # Tell zsh: "this part is fixed, don't match on it"
+  if [[ "$prefix" != "$cur" ]]; then
+    IPREFIX="${prefix},"
+    PREFIX="$last"
+  else
+    IPREFIX=""
+    PREFIX="$cur"
+  fi
 
   # Build GitLab query
   local query="users?state=active&per_page=100"
-  local last_len=${#last}
 
-  # Only use &search= when there are 3 or more characters
+  # Only use &search= when fragment has 3+ chars
   if (( last_len >= 3 )); then
     query="${query}&search=${last}"
   fi
@@ -29,7 +43,7 @@ _cmr() {
   local -a users
   users=("${(@f)$(glab api "$query" 2>/dev/null | jq -r '.[].username')}")
 
-  # If 1–2 chars, do local filtering over the full list
+  # If 1–2 chars, filter locally on the full list
   if (( last_len > 0 && last_len < 3 )); then
     local -a filtered
     local u
@@ -40,16 +54,8 @@ _cmr() {
     users=("${filtered[@]}")
   fi
 
-  # Build final completion items
-  local -a completions
-  if [[ "$prefix" != "$cur" ]]; then
-    prefix="${prefix},"
-    completions=("${prefix}${^users}")
-  else
-    completions=("${users[@]}")
-  fi
-
-  _describe 'users' completions
+  # Now just offer the usernames; zsh will prepend $IPREFIX automatically
+  compadd -Q -- "${users[@]}"
 }
 
 function _tat_autocomplete() {
