@@ -33,24 +33,3 @@ function tat() {
 function tls() {
     tmuxinator list | grep -v tmuxinator | tr ' ' '\n' | grep -v '^$'
 }
-
-function _tat_autocomplete() {
-    local -a projects files dirs
-    local expl
-
-    # Get tmuxinator projects
-    projects=(${(f)"$(tls)"})
-
-    # Get files and directories with proper completion
-    _alternative \
-        'projects:tmuxinator projects:compadd -a projects' \
-        'files:files:_files'
-}
-
-# Register the completion function for zsh
-if [[ -n ${ZSH_VERSION-} ]]; then
-    compdef _tat_autocomplete tat
-else
-    # Fallback for bash
-    complete -f -F _tat_autocomplete -o default tat
-fi

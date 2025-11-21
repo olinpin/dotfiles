@@ -404,3 +404,4 @@ function gpla() {
 
 # source the tmux-sessions.sh in the same folder
 source $(dirname "$0")/tmux-sessions.sh
+source $(dirname "$0")/completion.sh
