@@ -1,5 +1,27 @@
 # autocomplete
 
+# Where to cache usernames (override with $CMR_USER_CACHE if you want)
+: ${CMR_USER_CACHE:="$HOME/.cache/cmr_users"}
+
+cmr_update_users() {
+  local cache="$CMR_USER_CACHE"
+  local dir="${cache:h}"   # directory part
+
+  mkdir -p -- "$dir"
+
+  echo "Updating cmr user cache in $cache..." >&2
+
+  # Fetch ALL active users (using --paginate for multiple pages)
+  glab api "users?state=active&per_page=100" --paginate \
+    | jq -r '.[].username' \
+    | sort -u > "$cache"
+
+  local count
+  count=$(wc -l < "$cache" | tr -d ' ')
+  echo "Stored $count usernames in $cache" >&2
+}
+
+
 _cmr() {
   emulate -L zsh
   setopt extended_glob
@@ -13,16 +35,25 @@ _cmr() {
     return
   fi
 
-  # Full current "word" at cursor (may contain commas)
+  # Load cached users
+  : ${CMR_USER_CACHE:="$HOME/.cache/cmr_users"}
+  local -a users
+  if [[ -r "$CMR_USER_CACHE" ]]; then
+    users=("${(@f)$(< "$CMR_USER_CACHE")}")
+  else
+    # No cache yet → nothing to complete
+    return 0
+  fi
+
+  # Full current "word" (may contain commas)
   local cur=$words[CURRENT]
 
   # Split into prefix (before last comma) and fragment being typed (after last comma)
   local prefix last
   prefix="${cur%,*}"
   last="${cur##*,}"
-  local last_len=${#last}
 
-  # Tell zsh: "this part is fixed, don't match on it"
+  # Tell zsh what is fixed and what is being completed
   if [[ "$prefix" != "$cur" ]]; then
     IPREFIX="${prefix},"
     PREFIX="$last"
@@ -31,30 +62,19 @@ _cmr() {
     PREFIX="$cur"
   fi
 
-  # Build GitLab query
-  local query="users?state=active&per_page=100"
-
-  # Only use &search= when fragment has 3+ chars
-  if (( last_len >= 3 )); then
-    query="${query}&search=${last}"
-  fi
-
-  # Fetch usernames
-  local -a users
-  users=("${(@f)$(glab api "$query" 2>/dev/null | jq -r '.[].username')}")
-
-  # If 1–2 chars, filter locally on the full list
-  if (( last_len > 0 && last_len < 3 )); then
+  # Filter users by the fragment (substring match)
+  if [[ -n "$last" ]]; then
     local -a filtered
     local u
     for u in "${users[@]}"; do
-      # substring match; change to == ${last}* for prefix-only
       [[ $u == *${last}* ]] && filtered+="$u"
     done
     users=("${filtered[@]}")
   fi
 
-  # Now just offer the usernames; zsh will prepend $IPREFIX automatically
+  (( ${#users} == 0 )) && return 0
+
+  # Offer usernames; zsh will prefix with $IPREFIX
   compadd -Q -- "${users[@]}"
 }
 
