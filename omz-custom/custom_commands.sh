@@ -402,10 +402,6 @@ function gpla() {
     echo "Finished fetching branches."
 }
 
-# source the tmux-sessions.sh in the same folder
-source $(dirname "$0")/tmux-sessions.sh
-<<<<<<< HEAD
-
 function aoc() {
   if [ -z "$1" ]; then
     echo "Usage: aoc <day> [year]"
@@ -450,4 +446,6 @@ function aoc() {
   echo "  - $dir/example.in"
 }
 
+# source the tmux-sessions.sh in the same folder
+source $(dirname "$0")/tmux-sessions.sh
 source $(dirname "$0")/completion.sh
