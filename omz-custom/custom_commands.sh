@@ -404,6 +404,7 @@ function gpla() {
 
 # source the tmux-sessions.sh in the same folder
 source $(dirname "$0")/tmux-sessions.sh
+<<<<<<< HEAD
 
 function aoc() {
   if [ -z "$1" ]; then
@@ -448,3 +449,5 @@ function aoc() {
   echo "  - $dir/input.in"
   echo "  - $dir/example.in"
 }
+
+source $(dirname "$0")/completion.sh
