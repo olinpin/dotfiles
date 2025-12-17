@@ -404,3 +404,47 @@ function gpla() {
 
 # source the tmux-sessions.sh in the same folder
 source $(dirname "$0")/tmux-sessions.sh
+
+function aoc() {
+  if [ -z "$1" ]; then
+    echo "Usage: aoc <day> [year]"
+    echo "Example: aoc 5        (creates Day5 for current year)"
+    echo "         aoc 12 2024  (creates Day12 for 2024)"
+    return 1
+  fi
+  
+  local AOC_DIR="$HOME/Developer/AOC"
+  local TEMPLATE_DIR="$AOC_DIR/templates"
+  
+  if [ ! -d "$AOC_DIR" ]; then
+    echo "Error: AOC directory not found at $AOC_DIR"
+    return 1
+  fi
+  
+  local day=$1
+  local year=${2:-$(date +%Y)}
+  local dir="$AOC_DIR/$year/Day$day"
+  
+  if [ -d "$dir" ]; then
+    echo "Error: $year/Day$day already exists!"
+    return 1
+  fi
+  
+  echo "Creating $year/Day$day..."
+  
+  mkdir -p "$dir"
+  
+  touch "$dir/input.in"
+  touch "$dir/example.in"
+  
+  if [ -f "$TEMPLATE_DIR/ans.py" ]; then
+    cp "$TEMPLATE_DIR/ans.py" "$dir/"
+  else
+    echo "Warning: Template file not found at $TEMPLATE_DIR/ans.py"
+  fi
+  
+  echo "✓ Created $year/Day$day with template files"
+  echo "  - $dir/ans.py"
+  echo "  - $dir/input.in"
+  echo "  - $dir/example.in"
+}
