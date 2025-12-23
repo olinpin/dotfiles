@@ -42,3 +42,7 @@ vim.opt.foldenable = false
 vim.opt.foldlevel = 99
 -- g.markdown_folding = 1 -- enable markdown folding
 
+-- Set LSP log level to WARN to reduce log spam (was filling 107MB!)
+-- Options: "trace", "debug", "info", "warn", "error", "off"
+vim.lsp.set_log_level("warn")
+
