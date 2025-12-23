@@ -3,10 +3,15 @@ glab-cli/config.yml
 glab-cli/**/mr.json
 **/.DS_Store
 **/lazy-lock.json
-github-copilot/hosts.json
+github-copilot/
 omz-custom/plugins
 omz-custom/vrm.sh
 omz
 testDir
 tmuxinator/*.yml
 !tmuxinator/template.yml.temp
+uv/
+gcloud/
+htop/
+mcphub
+spicetify

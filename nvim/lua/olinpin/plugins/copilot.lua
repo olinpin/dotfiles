@@ -4,6 +4,9 @@ return {
 	event = "InsertEnter",
 	config = function()
 		require("copilot").setup({
+            -- get the node path from env variable $NODE_PATH if it's set
+            -- copilot_node_command = "/Users/oliverhnat/.nvm/versions/node/v22.21.1/bin/node",
+            copilot_node_command = os.getenv("NODE_PATH"),
 			suggestion = {
 				enabled = true,
 				auto_trigger = true,

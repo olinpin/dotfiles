@@ -19,6 +19,9 @@ local PACKAGES = {
 	"pyright",
 	"typescript-language-server",
 	"yaml-language-server",
+	"vue-language-server",
+	"ts_ls",
+	"typescript-tools",
 	-- Format
 	"black",
 	"flake8",
@@ -93,22 +96,22 @@ local function syncPackages(ensurePacks)
 		end)
 
 		-- Auto-clean unused packages
-		local installedPackages = masonReg.get_installed_package_names()
-		vim.iter(installedPackages):each(function(packName)
-			-- Check if installed package is in our ensure list (without version suffix)
-			local isEnsured = vim.iter(ensurePacks):any(function(ensurePack)
-				local name = ensurePack:match("([^@]+)")
-				return name == packName
-			end)
-
-			if not isEnsured then
-				masonReg.get_package(packName):uninstall()
-				local msg = ("[%s] uninstalled."):format(packName)
-				vim.defer_fn(function()
-					vim.notify(msg, nil, { title = "Mason", icon = "󰅗" })
-				end, 0)
-			end
-		end)
+		-- local installedPackages = masonReg.get_installed_package_names()
+		-- vim.iter(installedPackages):each(function(packName)
+		-- 	-- Check if installed package is in our ensure list (without version suffix)
+		-- 	local isEnsured = vim.iter(ensurePacks):any(function(ensurePack)
+		-- 		local name = ensurePack:match("([^@]+)")
+		-- 		return name == packName
+		-- 	end)
+		--
+		-- 	if not isEnsured then
+		-- 		masonReg.get_package(packName):uninstall()
+		-- 		local msg = ("[%s] uninstalled."):format(packName)
+		-- 		vim.defer_fn(function()
+		-- 			vim.notify(msg, nil, { title = "Mason", icon = "󰅗" })
+		-- 		end, 0)
+		-- 	end
+		-- end)
 	end
 
 	masonReg.refresh(refreshCallback)
@@ -183,7 +186,12 @@ return {
 				},
 			})
 
-			vim.lsp.config("ts_ls", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("ts_ls", { 
+				on_attach = on_attach, 
+				capabilities = capabilities,
+			})
+			vim.lsp.enable("ts_ls")
+			
 			vim.lsp.config("pyright", { on_attach = on_attach, capabilities = capabilities })
 			vim.lsp.config("html", { on_attach = on_attach, capabilities = capabilities })
 			vim.lsp.config("cssls", { on_attach = on_attach, capabilities = capabilities })
@@ -201,6 +209,11 @@ return {
 				},
 			})
 			vim.lsp.config("eslint", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("vue_ls", { 
+				on_attach = on_attach, 
+				capabilities = capabilities,
+			})
+			vim.lsp.enable("vue_ls")
 
 			require("mason-lspconfig").setup({
 				ensure_installed = {
@@ -213,6 +226,7 @@ return {
 					"yamlls",
 					"intelephense",
 					"eslint",
+					"vue_ls",
 				},
 				automatic_installation = true,
 			})
