@@ -26,11 +26,21 @@ _cmr() {
   setopt extended_glob
 
   local -a opts
-  opts=('--draft')
+  opts=('--draft' '--target-branch')
 
   # Option completion
   if [[ $words[CURRENT] == -* ]]; then
     _describe 'options' opts
+    return
+  fi
+
+  # Check if previous word was --target-branch
+  local prev_word="${words[CURRENT-1]}"
+  if [[ "$prev_word" == "--target-branch" ]]; then
+    # Complete with git branches
+    local -a branches
+    branches=(${(f)"$(git branch -a 2>/dev/null | sed 's/^[* ]*//' | sed 's/^remotes\/origin\///' | sort -u)"})
+    _describe 'branches' branches
     return
   fi
 

@@ -59,12 +59,10 @@ function v() {
 }
 
 function dcu() {
-  od
   docker-compose up --build $1 $2 $3 $4 $5 $6 $7 $8 $9 
 }
 
 function dcud () {
-  od
   docker-compose up -d --build $1 $2 $3 $4 $5 $6 $7 $8 $9 
 }
 
@@ -193,6 +191,10 @@ function cmr() {
   else
     target_branch="master"
   fi
+
+  if [[ $1 == "--target-branch" ]]; then
+    target_branch=$2
+  fi;
 
   glab mr create -a oliver $reviewers --target-branch=$target_branch -t "Merge branch: '$(git branch --show-current)' into $target_branch" --fill -y $draft
 }
