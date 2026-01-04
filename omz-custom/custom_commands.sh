@@ -123,9 +123,8 @@ function cmple() {
   ./$result
 }
 
-function ccd() {
-  printf "%q" "$(pwd)" | pbcopy
-}
+alias ccd="printf '%q' \"$(pwd)\" | pbcopy"
+alias ccb="printf '%q' \"$(git rev-parse --abbrev-ref HEAD)\" | pbcopy"
 
 alias t="tmux"
 
