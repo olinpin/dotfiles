@@ -162,6 +162,16 @@ function dbar() {
 }
 
 
+function gcmr() {
+  if [[ "$*" == "--draft" ]]
+  then
+    draft="--draft"
+  else
+    draft=""
+  fi
+  gh pr create -a "@me" --fill -y $draft
+}
+
 function cmr() {
   if [[ "$*" == "--draft" ]]
   then
