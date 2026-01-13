@@ -19,6 +19,8 @@ return {
 			vim.keymap.del("n", "<leader>aB")
 			vim.keymap.del("n", "<leader>aS")
 			vim.keymap.del("n", "<leader>an")
+			vim.keymap.del("n", "<leader>aC")
+			vim.keymap.del("n", "<leader>az")
 		end)
 	end,
 	opts = {
