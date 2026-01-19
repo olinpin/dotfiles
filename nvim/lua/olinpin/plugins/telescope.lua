@@ -31,6 +31,7 @@ return {
 		telescope.setup({
 			extensions = {
 				smart_open = {
+					cwd_only = true,
 					mappings = {
 						i = {
 							-- works around smart_open overriding ctrl-w keybind for deleting

@@ -6,7 +6,6 @@
 -- https://mason-registry.dev/registry/list
 local PACKAGES = {
 	-- LSP
-	"angular-language-server",
 	"ansible-language-server",
 	"css-lsp",
 	"cssmodules-language-server",
@@ -186,9 +185,23 @@ return {
 				},
 			})
 
-			vim.lsp.config("ts_ls", { 
-				on_attach = on_attach, 
+			vim.lsp.config("ts_ls", {
+				on_attach = on_attach,
 				capabilities = capabilities,
+				root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+				init_options = {
+					hostInfo = "neovim",
+					preferences = {
+						importModuleSpecifierPreference = "relative",
+					},
+				},
+				settings = {
+					typescript = {
+						preferences = {
+							importModuleSpecifierPreference = "relative",
+						},
+					},
+				},
 			})
 			vim.lsp.enable("ts_ls")
 			
@@ -196,6 +209,7 @@ return {
 			vim.lsp.config("html", { on_attach = on_attach, capabilities = capabilities })
 			vim.lsp.config("cssls", { on_attach = on_attach, capabilities = capabilities })
 			vim.lsp.config("jsonls", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.enable("jsonls")
 			vim.lsp.config("yamlls", { on_attach = on_attach, capabilities = capabilities })
 			vim.lsp.config("intelephense", {
 				on_attach = on_attach,
@@ -208,7 +222,15 @@ return {
 					},
 				},
 			})
-			vim.lsp.config("eslint", { on_attach = on_attach, capabilities = capabilities })
+			vim.lsp.config("eslint", {
+				on_attach = on_attach,
+				capabilities = capabilities,
+				root_markers = { "eslint.config.js", ".eslintrc.js", ".eslintrc.json", ".eslintrc", "package.json" },
+				settings = {
+					workingDirectories = { mode = "auto" },
+				},
+			})
+			vim.lsp.enable("eslint")
 			vim.lsp.config("vue_ls", { 
 				on_attach = on_attach, 
 				capabilities = capabilities,
