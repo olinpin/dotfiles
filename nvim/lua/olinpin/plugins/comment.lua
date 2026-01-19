@@ -1,8 +1,8 @@
 return {
     "numToStr/Comment.nvim",
-    event = "VeryLazy",
-    lazy = false,
-
+    keys = {
+        { "<leader>/", desc = "Toggle comment" },
+    },
     config = function ()
         require('Comment').setup({
             opleader = {

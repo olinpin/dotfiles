@@ -1,3 +1,4 @@
 return {
-    "https://github.com/plentiform/go-ide",
+	"https://github.com/plentiform/go-ide",
+	ft = "go",
 }

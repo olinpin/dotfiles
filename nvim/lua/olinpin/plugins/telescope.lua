@@ -19,13 +19,42 @@ local new_maker = function(filepath, bufnr, opts)
 	previewers.buffer_previewer_maker(filepath, bufnr, opts)
 end
 
+local function grepInFiles()
+	local builtin = require("telescope.builtin")
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+	builtin.filetypes({
+		attach_mappings = function(prompt_bufnr, _)
+			actions.select_default:replace(function()
+				actions.close(prompt_bufnr)
+				local selection = action_state.get_selected_entry()
+				local filetype = selection.value
+
+				builtin.live_grep({
+					additional_args = function()
+						return { "--glob", "*." .. filetype }
+					end,
+				})
+			end)
+			return true
+		end,
+	})
+end
+
 return {
 	"nvim-telescope/telescope.nvim",
-	event = "VeryLazy",
+	cmd = "Telescope",
 	tag = "0.1.8",
 	dependencies = { "nvim-lua/plenary.nvim" },
-	init = function()
-		local builtin = require("telescope.builtin")
+	keys = {
+		{ "<leader>ft", grepInFiles, desc = "Live grep by filetype" },
+		{ "<leader>*", function() require("telescope.builtin").grep_string() end, desc = "Grep current string" },
+		{ "<leader>fs", function() require("telescope.builtin").find_files() end, desc = "Find files" },
+		{ "<leader>fg", function() require("telescope.builtin").git_branches() end, desc = "Find Git branches" },
+		{ "<leader>fc", function() require("telescope.builtin").git_commits() end, desc = "Find Commits" },
+		{ "<leader>fw", function() require("telescope.builtin").live_grep() end, desc = "Find Words" },
+	},
+	config = function()
 		local telescope = require("telescope")
 
 		telescope.setup({
@@ -82,38 +111,5 @@ return {
 				filesize_limit = 0.5, -- MB
 			},
 		})
-
-		local function grepInFiles()
-			local actions = require("telescope.actions")
-			local action_state = require("telescope.actions.state")
-			builtin.filetypes({
-				attach_mappings = function(prompt_bufnr, _)
-					actions.select_default:replace(function()
-						actions.close(prompt_bufnr)
-						local selection = action_state.get_selected_entry()
-						local filetype = selection.value
-
-						builtin.live_grep({
-							additional_args = function()
-								return { "--glob", "*." .. filetype }
-							end,
-						})
-					end)
-					return true
-				end,
-			})
-		end
-
-		local function smart_open()
-			require("telescope").extensions.smart_open.smart_open()
-		end
-
-		vim.keymap.set("n", "<leader>ft", grepInFiles, { desc = "Live grep by filetype" })
-		vim.keymap.set("n", "<leader>*", builtin.grep_string, { desc = "Grep current string" })
-		vim.keymap.set("n", "<leader>fs", builtin.find_files, { desc = "Find files" })
-		vim.keymap.set("n", "<leader>fg", builtin.git_branches, { desc = "Find Git branches" })
-		vim.keymap.set("n", "<leader>fc", builtin.git_commits, { desc = "Find Commits" })
-		vim.keymap.set("n", "<leader>fw", builtin.live_grep, { desc = "Find Words" })
-		vim.keymap.set("n", "<leader>ff", smart_open, { desc = "Smart Open" })
 	end,
 }

@@ -1,11 +1,8 @@
 return {
-    'tamton-aquib/duck.nvim',
-    config = function()
-        local duck = require("duck")
-        vim.keymap.set('n', '<leader>dd', function() duck.hatch() end, {})
-        vim.keymap.set('n', '<leader>dc', function() duck.hatch("🐿️", 20) end, {})
-        vim.keymap.set('n', '<leader>dk', function() duck.cook() end, {})
-        vim.keymap.set('n', '<leader>dk', function() duck.cook("🐿️") end, {})
-        -- duck.hatch("🐿️", 20)
-    end
+	"tamton-aquib/duck.nvim",
+	keys = {
+		{ "<leader>dd", function() require("duck").hatch() end, desc = "Duck hatch" },
+		{ "<leader>dc", function() require("duck").hatch("🐿️", 20) end, desc = "Duck squirrel" },
+		{ "<leader>dk", function() require("duck").cook() end, desc = "Duck cook" },
+	},
 }

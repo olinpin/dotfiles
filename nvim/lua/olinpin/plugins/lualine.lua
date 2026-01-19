@@ -1,14 +1,14 @@
 return {
 	"nvim-lualine/lualine.nvim",
 	event = "VeryLazy",
-	requires = { "nvim-tree/nvim-web-devicons", opt = true },
-	init = function()
+	dependencies = { "nvim-tree/nvim-web-devicons" },
+	config = function()
 		local lualine = require("lualine")
 		local custom_ayu_mirage = require("lualine.themes.ayu_mirage")
 		custom_ayu_mirage.normal.c.bg = "#172c35"
 		lualine.setup({
-			section_separators = { left = "", right = "" },
-			component_separators = { left = "", right = "" },
+			section_separators = { left = "", right = "" },
+			component_separators = { left = "", right = "" },
 			sections = {
 				lualine_a = { "mode" },
 				lualine_b = { "branch", "diff", "diagnostics" },
