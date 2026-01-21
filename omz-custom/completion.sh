@@ -103,10 +103,16 @@ function _tat_autocomplete() {
         'files:files:_files'
 }
 
+function _rut() {
+    # Complete with files, preferring tests/ directory
+    _files -g '*.php'
+}
+
 # Register the completion function for zsh
 if [[ -n ${ZSH_VERSION-} ]]; then
     compdef _tat_autocomplete tat
     compdef _cmr cmr
+    compdef _rut rut
 else
     # Fallback for bash
     complete -f -F _tat_autocomplete -o default tat

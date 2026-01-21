@@ -86,6 +86,10 @@ function rutvrm () {
   docker-compose exec -T mysql mysql --host=mysql --password=deadbeef --database=vrm_testing < tests/resources/db/*.sql
 }
 
+function rut() {
+  rutvrm && docker compose exec app composer test "$@"
+}
+
 alias yas="yarn serve"
 
 alias yai="yarn install"
