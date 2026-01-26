@@ -37,6 +37,18 @@ choice="$(printf '%s\n' "$sel" | sed -n '3p')"
 project="${choice:-$query}"
 [ -n "$project" ] || exit 0
 
+if [ "$project" = "vrm-deploy" ] && tmux has-session -t vrm-deploy 2>/dev/null; then
+  current_session=$(tmux display-message -p '#S' 2>/dev/null)
+  if [ "$current_session" = "vrm-deploy" ]; then
+    tmux rename-session -t vrm-deploy vrm-deploy-old
+    tmuxinator start vrm-deploy
+    tmux kill-session -t vrm-deploy-old 2>/dev/null
+    exit 0
+  else
+    tmux kill-session -t vrm-deploy 2>/dev/null
+  fi
+fi
+
 tmuxinator start "$project"
 exit 0
 
