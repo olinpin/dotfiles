@@ -289,6 +289,7 @@ alias gl="glab"
 alias glci="glab ci view"
 alias glciw="glab ci view --web"
 alias glmr="glab mr view --web"
+alias mr=glmr
 
 # get snippets from elnino gitlab
 function gitlab_snippets() {
